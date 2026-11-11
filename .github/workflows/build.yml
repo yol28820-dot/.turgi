@@ -1,0 +1,26 @@
+name: build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Zip'i ac ve derle
+        run: |
+          unzip -q TurgiiVisuals-stage1.zip
+          cd TurgiiVisuals
+          chmod +x ./gradlew
+          ./gradlew build --stacktrace
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TurgiiVisuals-jar
+          path: TurgiiVisuals/build/libs/TurgiiVisuals-1.0.0.jar
+          if-no-files-found: error
